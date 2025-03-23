@@ -62,9 +62,10 @@ void GetUserInput()
         // update Record
         Update();
         break;
-        // default:
-        //   Console.WriteLine("Invalid Command. Please type q, v, i or u\n");
-        //   break;
+      default:
+        Console.Clear();
+        Console.WriteLine("Invalid Command. Please type q, v, i, d or u\n");
+        break;
     }
   }
 }
