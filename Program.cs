@@ -67,6 +67,8 @@ void Insert()
   // get date from user
   string date = GetDateInput();
 
+  // get number of water drank in terms of glasses
+  int quantity = GetNumberInput("\n\nPlease insert number of glasses(no decimals allowed)\n\n");
 
 }
 
@@ -83,5 +85,18 @@ string GetDateInput()
   }
 
   return dateInput;
+}
+
+int GetNumberInput(string message)
+{
+  Console.WriteLine(message);
+
+  string numberInput = Console.ReadLine();
+
+  if (numberInput == "q") GetUserInput();
+
+  int finalInput = Convert.ToInt32(numberInput);
+
+  return finalInput;
 }
 
