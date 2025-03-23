@@ -58,10 +58,10 @@ void GetUserInput()
         // delete record
         Delete();
         break;
-        // case "u":
-        //   // update Record
-        //   Update();
-        //   break;
+      case "u":
+        // update Record
+        Update();
+        break;
         // default:
         //   Console.WriteLine("Invalid Command. Please type q, v, i or u\n");
         //   break;
@@ -194,6 +194,55 @@ void Delete()
   else
   {
     Console.WriteLine($"\n\nRecord with Id {recordId} is deleted.\n\n");
+  }
+
+}
+
+void Update()
+{
+  // Console.Clear();
+  ViewAllRecords();
+
+  var recordId = GetNumberInput("\n\nPlease type the Id of the record you want to update or type q to exit to Main Menu\n\n");
+
+  using var connection = new SqliteConnection(connectionString);
+  connection.Open();
+
+  // check if that record exist 
+  var checkSql = "SELECT EXISTS(SELECT 1 FROM drinking_water WHERE id = @recordId)";
+
+  using var checkCommand = new SqliteCommand(checkSql, connection);
+  checkCommand.Parameters.AddWithValue("@recordId", recordId);
+
+  int recordExists = Convert.ToInt32(checkCommand.ExecuteScalar());
+  Console.WriteLine($"\nrecordExists: {recordExists}");
+
+  if (recordExists == 0)
+  {
+    Console.WriteLine($"\n\nRecord with Id {recordId} doesn't exist.\n\n");
+  }
+  else
+  {
+    // if exist, runs as follow by default
+
+    string date = GetDateInput();
+
+    int quantity = GetNumberInput("\n\nPlease insert number of glasses(no decimals allowed)\n\n");
+
+    var sql =
+      @"UPDATE  drinking_water 
+      SET date = @date, quantity = @quantity
+      WHERE Id = @recordId
+    ";
+    using var command = new SqliteCommand(sql, connection);
+    command.Parameters.AddWithValue("@date", date);
+    command.Parameters.AddWithValue("@quantity", quantity);
+    command.Parameters.AddWithValue("@recordId", recordId);
+
+    // Execute the UPDATE statement
+    var rowUpdated = command.ExecuteNonQuery();
+
+    Console.WriteLine($"Record with Id {recordId} has been updated successfully.");
   }
 
 }
