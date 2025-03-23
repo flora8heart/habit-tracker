@@ -6,16 +6,16 @@ string connectionString = @"Data Source =habit-Tracker.db";
 using (var connection = new SqliteConnection(connectionString))
 {
   connection.Open();
-  var tableCmd = connection.CreateCommand();
+  var sqlCmd = connection.CreateCommand();
 
-  tableCmd.CommandText =
+  sqlCmd.CommandText =
     @"CREATE TABLE IF NOT EXISTS drinking_water (
       Id INTEGER PRIMARY KEY AUTOINCREMENT,
       Date TEXT,
       Quantity INTEGER
     )";
 
-  tableCmd.ExecuteNonQuery();
+  sqlCmd.ExecuteNonQuery();
 
   connection.Close(); // not needed when using "using" to open connection https://www.sqlitetutorial.net/sqlite-csharp/connect/
 }
@@ -75,17 +75,17 @@ void Insert()
   using (var connection = new SqliteConnection(connectionString))
   {
     connection.Open();
-    var tableCmd = connection.CreateCommand();
-    tableCmd.CommandText =
+    var sqlCmd = connection.CreateCommand();
+    sqlCmd.CommandText =
       @"INSERT INTO drinking_water(date, quantity)
       VALUES(@date, @quantity
       )";
 
     // prevent sql injection
-    tableCmd.Parameters.AddWithValue("@date", date);
-    tableCmd.Parameters.AddWithValue("@quantity", quantity);
+    sqlCmd.Parameters.AddWithValue("@date", date);
+    sqlCmd.Parameters.AddWithValue("@quantity", quantity);
 
-    tableCmd.ExecuteNonQuery();
+    sqlCmd.ExecuteNonQuery();
   }
 
 
@@ -125,11 +125,11 @@ int GetNumberInput(string message)
 //   using (var connection = new SqliteConnection(connectionString))
 //   {
 //     connection.Open();
-//     var tableCmd = connection.CreateCommand();
+//     var sqlCmd = connection.CreateCommand();
 
-//     tableCmd.CommandText =
+//     sqlCmd.CommandText =
 //       "SELECT * FROM drinking_water";
 
-//     tableCmd.ExecuteNonQuery();
+//     sqlCmd.ExecuteNonQuery();
 //   }
 // }
