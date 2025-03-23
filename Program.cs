@@ -19,7 +19,9 @@ using (var connection = new SqliteConnection(connectionString))
   connection.Close();
 }
 
-static void GetUserInput()
+GetUserInput();
+
+void GetUserInput()
 {
   Console.Clear();
   bool closeApp = false;
@@ -38,25 +40,48 @@ static void GetUserInput()
 
     switch (userInput)
     {
-      case "q":
-        Console.WriteLine("\nGoodbye!\n");
-        closeApp = true;
-        break;
-      case "v":
-        // view all Records
-        ViewAllRecords();
-        break;
+      // case "q":
+      //   Console.WriteLine("\nGoodbye!\n");
+      //   closeApp = true;
+      //   break;
+      // case "v":
+      //   // view all Records
+      //   ViewAllRecords();
+      //   break;
       case "i":
         // insert Record
         Insert();
         break;
-      case "u":
-        // update Record
-        Update();
-        break;
-      default:
-        Console.WriteLine("Invalid Command. Please type q, v, i or u\n")
+        // case "u":
+        //   // update Record
+        //   Update();
+        //   break;
+        // default:
+        //   Console.WriteLine("Invalid Command. Please type q, v, i or u\n");
+        //   break;
     }
   }
+}
+void Insert()
+{
+  // get date from user
+  string date = GetDateInput();
+
+
+}
+
+string GetDateInput()
+{
+  Console.WriteLine("\n\nPlease insert the date: (Formate: dd-mm-yy). Type q to return to main menu");
+
+  string dateInput = Console.ReadLine();
+
+  // press q to return to main menu
+  if (dateInput == "q")
+  {
+    GetUserInput();
+  }
+
+  return dateInput;
 }
 
