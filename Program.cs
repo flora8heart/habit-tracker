@@ -16,7 +16,7 @@ using (var connection = new SqliteConnection(connectionString))
 
   tableCmd.ExecuteNonQuery();
 
-  connection.Close();
+  connection.Close(); // not needed when using "using" to open connection https://www.sqlitetutorial.net/sqlite-csharp/connect/
 }
 
 GetUserInput();
@@ -69,6 +69,20 @@ void Insert()
 
   // get number of water drank in terms of glasses
   int quantity = GetNumberInput("\n\nPlease insert number of glasses(no decimals allowed)\n\n");
+
+  // insert into database
+  using (var connection = new SqliteConnection(connectionString))
+  {
+    connection.Open();
+    var tableCmd = connection.CreateCommand();
+    tableCmd.CommandText =
+      @$"INSERT INTO drinking_water(date, quantity)
+      VALUES('{date}', {quantity}
+      )";
+
+    tableCmd.ExecuteNonQuery();
+  }
+
 
 }
 
