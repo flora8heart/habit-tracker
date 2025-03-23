@@ -5,22 +5,21 @@ using Microsoft.Data.Sqlite;
 
 string connectionString = @"Data Source =habit-Tracker.db";
 
-using (var connection = new SqliteConnection(connectionString))
-{
-  connection.Open();
-  var sqlCmd = connection.CreateCommand();
+using var connection = new SqliteConnection(connectionString);
+connection.Open();
+var sqlCmd = connection.CreateCommand();
 
-  sqlCmd.CommandText =
-    @"CREATE TABLE IF NOT EXISTS drinking_water (
-      Id INTEGER PRIMARY KEY AUTOINCREMENT,
-      Date TEXT,
-      Quantity INTEGER
-    )";
+sqlCmd.CommandText =
+  @"CREATE TABLE IF NOT EXISTS drinking_water (
+    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+    Date TEXT,
+    Quantity INTEGER
+  )";
 
-  sqlCmd.ExecuteNonQuery();
+sqlCmd.ExecuteNonQuery();
 
-  connection.Close(); // not needed when using "using" to open connection https://www.sqlitetutorial.net/sqlite-csharp/connect/
-}
+//connection.Close(); // not needed when using "using" to open connection https://www.sqlitetutorial.net/sqlite-csharp/connect/
+
 
 GetUserInput();
 
@@ -126,49 +125,46 @@ int GetNumberInput(string message)
 void ViewAllRecords()
 {
   Console.Clear();
-  using (var connection = new SqliteConnection(connectionString))
+  using var connection = new SqliteConnection(connectionString);
+
+  connection.Open();
+  var sqlCmd = connection.CreateCommand();
+
+  sqlCmd.CommandText =
+    "SELECT * FROM drinking_water";
+
+  //create new list with the newly created DrinkingWater class
+  List<DrinkingWater> habitData = new();
+
+  SqliteDataReader reader = sqlCmd.ExecuteReader();
+
+  if (reader.HasRows)
+
   {
-    connection.Open();
-    var sqlCmd = connection.CreateCommand();
-
-    sqlCmd.CommandText =
-      "SELECT * FROM drinking_water";
-
-    //create new list with the newly created DrinkingWater class
-    List<DrinkingWater> habitData = new();
-
-    SqliteDataReader reader = sqlCmd.ExecuteReader();
-
-    if (reader.HasRows)
-
+    // add database data to a list
+    while (reader.Read())
     {
-      // add database data to a list
-      while (reader.Read())
+      habitData.Add(
+      new DrinkingWater
       {
-        habitData.Add(
-        new DrinkingWater
-        {
-          Id = reader.GetInt32(0), //from first column
-          Date = DateTime.ParseExact(reader.GetString(1), "dd-MM-yy", new CultureInfo("en-Us")), // from second column
-          Quantity = reader.GetInt32(2)
-        });
-      }
+        Id = reader.GetInt32(0), //from first column
+        Date = DateTime.ParseExact(reader.GetString(1), "dd-MM-yy", new CultureInfo("en-Us")), // from second column
+        Quantity = reader.GetInt32(2)
+      });
+    }
 
-      // print out list
-      Console.WriteLine("--------------------------------------\n");
-      foreach (var data in habitData)
-      {
-        Console.WriteLine($"{data.Id} -- {data.Date.ToString("dd-MMM-yyyy")} - Quantity: {data.Quantity}");
-      }
-      Console.WriteLine("--------------------------------------\n");
-    }
-    else
+    // print out list
+    Console.WriteLine("--------------------------------------\n");
+    foreach (var data in habitData)
     {
-      Console.WriteLine("\nNo rows found\n");
+      Console.WriteLine($"{data.Id} -- {data.Date.ToString("dd-MMM-yyyy")} - Quantity: {data.Quantity}");
     }
+    Console.WriteLine("--------------------------------------\n");
   }
-
-
+  else
+  {
+    Console.WriteLine("\nNo rows found\n");
+  }
 }
 
 void Delete()
