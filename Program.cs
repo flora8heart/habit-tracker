@@ -42,10 +42,10 @@ void GetUserInput()
 
     switch (userInput)
     {
-      // case "q":
-      //   Console.WriteLine("\nGoodbye!\n");
-      //   closeApp = true;
-      //   break;
+      case "q":
+        Console.WriteLine("\nGoodbye!\n");
+        closeApp = true;
+        break;
       case "v":
         // view all Records
         ViewAllRecords();
