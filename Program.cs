@@ -157,7 +157,7 @@ void ViewAllRecords()
     Console.WriteLine("--------------------------------------\n");
     foreach (var data in habitData)
     {
-      Console.WriteLine($"{data.Id} -- {data.Date.ToString("dd-MMM-yyyy")} - Quantity: {data.Quantity}");
+      Console.WriteLine($"{data.Id} -- {data.Date:dd-MMM-yyyy} - Quantity: {data.Quantity}");
     }
     Console.WriteLine("--------------------------------------\n");
   }
