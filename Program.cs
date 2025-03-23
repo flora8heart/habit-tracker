@@ -183,7 +183,19 @@ void Delete()
   command.Parameters.AddWithValue("@Id", recordId);
 
   // execute the INSERT statement
-  var rowInserted = command.ExecuteNonQuery();
+  var rowDeleted = command.ExecuteNonQuery(); //returns the number of rows affected by the command
+
+  // Console.WriteLine($"rowDeleted: {rowDeleted}");
+
+  if (rowDeleted == 0)
+  {
+    Console.WriteLine($"\n\nRecord with Id {recordId} doesn't exist.\n\n");
+  }
+  else
+  {
+    Console.WriteLine($"\n\nRecord with Id {recordId} is deleted.\n\n");
+  }
+
 }
 
 class DrinkingWater
