@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.Sqlite;
+﻿using System.Data;
+using Microsoft.Data.Sqlite;
 
 string connectionString = @"Data Source =habit-Tracker.db";
 
@@ -76,9 +77,13 @@ void Insert()
     connection.Open();
     var tableCmd = connection.CreateCommand();
     tableCmd.CommandText =
-      @$"INSERT INTO drinking_water(date, quantity)
-      VALUES('{date}', {quantity}
+      @"INSERT INTO drinking_water(date, quantity)
+      VALUES(@date, @quantity
       )";
+
+    // prevent sql injection
+    tableCmd.Parameters.AddWithValue("@date", date);
+    tableCmd.Parameters.AddWithValue("@quantity", quantity);
 
     tableCmd.ExecuteNonQuery();
   }
@@ -114,3 +119,17 @@ int GetNumberInput(string message)
   return finalInput;
 }
 
+// void ViewAllRecords()
+// {
+//   Console.Clear();
+//   using (var connection = new SqliteConnection(connectionString))
+//   {
+//     connection.Open();
+//     var tableCmd = connection.CreateCommand();
+
+//     tableCmd.CommandText =
+//       "SELECT * FROM drinking_water";
+
+//     tableCmd.ExecuteNonQuery();
+//   }
+// }
